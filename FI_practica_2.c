@@ -48,6 +48,15 @@ void MultEscalar( float vect[N], float vectres[N], float alfa ) {
     }
 }
 
+float Scalar( float vect1[N], float vect2[N] ){
+	for (int i = 0; i < N; i++) {
+		float vect3 = vect1[i] * vect2[i];
+		}
+}
+
+
+
+
 int main() {
 	InitData();
 	PrintVect(V1, 5, 9);
