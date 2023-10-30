@@ -28,10 +28,22 @@ void InitData(){
 }
 
 void PrintVect( float vect[N],int from, int numel ){
+	for (int i = from; i<from+numel; i++){
+		printf("%f", vect[i]);
+	}
+	printf("\n");
+
 }
 
+void PrintRow(float mat[N][N], int row, int from, int numel) {
+    for (int i = from; i < from + numel && i < N; i++) {
+        printf("%.2f ", mat[row][i]);
+    }
+    printf("\n");
+}
 int main() {
-
-
+	InitData();
+	PrintVect(V1, 5, 9);
+	PrintRow(Mat, 6, 1, 7);
     return 0;
 }
