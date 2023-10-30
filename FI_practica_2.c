@@ -37,10 +37,17 @@ void PrintVect( float vect[N],int from, int numel ){
 
 void PrintRow(float mat[N][N], int row, int from, int numel) {
     for (int i = from; i < from + numel && i < N; i++) {
-        printf("%.2f ", mat[row][i]);
+        printf("%f ", mat[row][i]);
     }
     printf("\n");
 }
+
+void MultEscalar( float vect[N], float vectres[N], float alfa ) {
+	 for (int i = 0; i < N; i++) {
+        vectres[i] = alfa * vect[i];
+    }
+}
+
 int main() {
 	InitData();
 	PrintVect(V1, 5, 9);
