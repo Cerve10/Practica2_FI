@@ -80,9 +80,11 @@ void Projection( float vect1[N], float vect2[N], float vectres[N] ){
 	float numerador = 0;
 	float denominador = 0;
 	float resultat = 0;
-        numerador = Scalar( vect1, vect2); 
-	denominador =  Magnitude(vect1);
-	MultEscalar(vect2, vectres, (numerador / denominador));
+	float fraccion = 0;
+        numerador = Scalar(vect1[N], vect2[N]); 
+	denominador =  Magnitude(vect1[N]);
+	fraccion = numerador/denominador;
+	vectres = MultEscalar(fraccion, vect2[i]);
 
 }
 
@@ -147,7 +149,6 @@ int DiagonalDom(float M[N][N]) {
         }
     }    return 1; // matriu diagonal
 }
-
 
 
 int main(){
