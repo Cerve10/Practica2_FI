@@ -5,12 +5,11 @@
 #define N 512
 
 float Mat[N][N], MatDD[N][N];
-
 float V1[N], V2[N], V3[N], V4[N];
 
-void InitData(){
+void InitData() {
         int i,j;
-        srand(8824553);
+        srand(4422543);
         for( i = 0; i < N; i++ )
          for( j = 0; j < N; j++ ){
                 Mat[i][j]=(((i*j)%3)?-1:1)*(100.0*(rand()/(1.0*RAND_MAX)));
@@ -36,7 +35,7 @@ void PrintVect( float vect[N],int from, int numel ){
 }
 
 void PrintRow(float mat[N][N], int row, int from, int numel) {
-    for (int i = from; i < from + numel && i < N; i++) {
+    for (int i = from; i < from + numel; i++) {
         printf("%f ", mat[row][i]);
     }
     printf("\n");
@@ -44,14 +43,16 @@ void PrintRow(float mat[N][N], int row, int from, int numel) {
 
 void MultEscalar( float vect[N], float vectres[N], float alfa ) {
 	 for (int i = 0; i < N; i++) {
-        vectres[i] = alfa * vect[i];
+		 vectres[i] = vect[i] * alfa;
     }
 }
 
 float Scalar( float vect1[N], float vect2[N] ){
+	float vect3;
 	for (int i = 0; i < N; i++) {
-		float vect3 = vect1[i] * vect2[i];
+		vect3 += vect1[i] * vect2[i];
 		}
+	return vect3;
 }
 
 float Magnitude(float vect[N]) {
@@ -77,12 +78,11 @@ int Ortogonal(float vect1[N], float vect2[N]) {
 }
 
 void Projection( float vect1[N], float vect2[N], float vectres[N] ){
-	float numerador = 0;
-	float denominador = 0;
-	float resultat = 0;
-        numerador = Scalar( vect1, vect2); 
-	denominador =  Magnitude(vect1);
-	MultEscalar(vect2, vectres, (numerador / denominador));
+	float numerador = Scalar(vect1, vect2);
+	float denominador = Magnitude(vect2);
+	float res = numerador / denominador; 
+	MultEscalar(vect2, vectres, res);
+
 
 }
 
@@ -174,25 +174,115 @@ int Jacobi( float M[N][N] , float vect[N], float vectres[N], unsigned int iter )
 
 int main(){
     InitData();
+    
 
-    PrintVect(V1, 0, 9);
-    PrintVect(V1, 256, 265);
-    PrintVect(V2, 0, 9);
-    PrintVect(V2, 256, 265);
-    PrintVect(V3, 0, 9);
-    PrintVect(V3, 256, 265);
-    PrintRow(Mat, 0, 9, 100);
 
-    float result = Scalar(V1, V2);
-    printf("Resultado de Scalar: %f\n", result);
-    float result1 = Scalar(V1, V3);
-    printf("Resultado de Scalar: %f\n", result1);
-    float result2 = Scalar(V2, V3);
-    printf("Resultado de Scalar: %f\n", result2);
+    // print vect
+    // A
+    PrintVect(V1, 0, 10);
+    PrintVect(V1, 256, 10);
+    PrintVect(V2, 0, 10);
+    PrintVect(V2, 256, 10);
+    PrintVect(V3, 0, 10);
+    PrintVect(V3, 256, 10);
+    printf("\n");
 
+    // print row
+    // B
+    PrintRow(Mat, 0, 0, 10);
+    PrintRow(Mat, 100, 0, 10);
+    printf("\n");
+    // C
+    PrintRow(MatDD,0, 0,10);
+    PrintRow(MatDD,100, 90,10);
+    printf("\n");
+    // D Infininorm
+    float INMat = Infininorm(Mat);
+    printf("Infininorma de Mat = %f\n", INMat);
+    float INMatDD = Infininorm(MatDD);
+    printf("Infininorma de MatDD = %f\n", INMatDD);
+    printf("\n");
+    // D norma ú
+    float OnenormMat = Onenorm(Mat);
+    printf("Norma ú de Mat = %f\n", OnenormMat);
+    float OnenormMatDD = Onenorm(MatDD);
+    printf("Norma ú de MatDD = %f\n", OnenormMatDD);
+    printf("\n");
+    //D NormFrobenius
+    float NormFrobeniusMat = NormFrobenius(Mat);
+    printf("Norma de Frobenius de Mat = %f\n", NormFrobeniusMat);
+    float NormFrobeniusMatDD = NormFrobenius(MatDD);
+    printf("Norma de Frobenius de MatDD = %f\n", NormFrobeniusMatDD);
+    printf("\n");
+    // D DIagonalDom
+    int isDiagonalDom = DiagonalDom(Mat);
+        
+    if (isDiagonalDom) {
+        printf("Mat és diagonal dominant.\n");
+    } else {
+        printf("Mat no és diagonal dominant.\n");
+    }
+
+    int isDiagonalDomDD = DiagonalDom(MatDD);
+
+    if (isDiagonalDomDD) {
+        printf("MatDD és diagonal dominant.\n");
+    } else {
+        printf("MatDD no és diagonal dominant.\n");
+    }
+	printf("\n");
+    // E
+    float Scalar1 = Scalar(V1, V2);
+    printf("Escalar V1, V2 =  %f\n", Scalar1);
+    float Scalar2 = Scalar(V1, V3);
+    printf("Escalar V1, V3 =  %f\n", Scalar2);
+    float Scalar3 = Scalar(V2, V3);
+    printf("Escalar V2, V3 =  %f\n", Scalar3);
+	printf("\n");
+    // F Magnitud 
+    float result,result2,result3;
     result = Magnitude(V1);
     printf("Magnitud de V1: %f\n", result);
-    result = Magnitude(V2);
+    result2 = Magnitude(V2);
+    printf("Magnitud de V2: %f\n", result2);
+    result3 = Magnitude(V3);
+    printf("Magnitud de V3: %f\n", result3);
+	printf("\n");
+    // G ortognal v1v2
+    int Ortogonal12 = Ortogonal(V1, V2);
+    int Ortogonal13 = Ortogonal(V1, V3);
+    int Ortogonal23 = Ortogonal(V2, V3);
+    if (Ortogonal12) {
+	    printf("V1 i V2 són ortogonals \n");
+    } else {
+	    printf("V1 i V2 són ortogonals \n");
+    }
+
+    if (Ortogonal13) {
+            printf("V1 i V3 són ortogonals \n");
+    } else {
+            printf("V1 i V3 són ortogonals \n");
+    }
+
+    if (Ortogonal23) {
+            printf("V2 i V3 són ortogonals \n");
+    } else {
+            printf("V2 i V3 són ortogonals \n");
+    }
+    printf("\n");
+
+    // H MultEscalar 
+    MultEscalar(V3, V3, 2.0);
+    PrintVect(V3, 0, 10);
+    PrintVect(V3, 256, 10);
+    printf("\n");
+    
+    // I `prjeccio
+    Projection(V2, V3, V4);
+    PrintVect(V4, 0 ,10);
+    Projection(V1, V2, V4);
+    PrintVect(V4, 0, 10);
+    printf("\n");
 
     // Jacob
     Jacobi(MatDD,V3,V4,1);
@@ -201,8 +291,8 @@ int main(){
 	    printf("%f ", V4[i]);
 	    	}
     Jacobi(MatDD,V3,V4,1000);
-    printf("ELs elements 0 a 9 de la solució (1000 iter) del sistema d'equacions són: \n");
-    for (int i = 0; i < 10; i++){
+    printf("ELs elements 0 a 9 de la solució (1000 iter) del sistema d'equacions són: ");
+	    for (int i = 0; i < 10; i++){
             printf("%f ", V4[i]);
                 }
     printf("\n");
