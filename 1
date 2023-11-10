@@ -193,20 +193,15 @@ int main(){
     result = Magnitude(V1);
     printf("Magnitud de V1: %f\n", result);
     result = Magnitude(V2);
+  int resultado= Jacobi(M, vect, vectres, iter);
 
-    // Jacob
-    Jacobi(MatDD,V3,V4,1);
-    printf("ELs elements 0 a 9 de la solució (1 iter) del sistema d'equacions són: \n");
-    for (int i = 0; i < 10; i++){
-	    printf("%f ", V4[i]);
-	    	}
-    Jacobi(MatDD,V3,V4,1000);
-    printf("ELs elements 0 a 9 de la solució (1000 iter) del sistema d'equacions són: \n");
-    for (int i = 0; i < 10; i++){
-            printf("%f ", V4[i]);
-                }
-    printf("\n");
+    if (resultado) {
+        printf("El resultado es:\n");
+        for (int i = 0; i < N; i++) {
+            printf("%.2f ", vectres[i]);
+        }
+        printf("\n");
+    } else {
+        printf("Mètode Jacobi NO aplicat\n");
+    }
 }
-
-
-
